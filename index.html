@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="">
+        <h1>Login</h1>
+        <label for="">Usuario</label>
+        <input type="text" name="u" id="">
+        <label for="">Password</label>
+        <input type="password" name="c" id="">
+        <input type="button" value="Ingresar" onclick="login(this.form)"> 
+        <h5>Derechos Reservados 2023 Gdl Jal Mexico</h5>
+        <h5>Copyright © 2015 - 2021, CTA CUCEI</h5>
+    </form>
+    <script>
+        function login(form){
+            if (form.u.value == "Pedro") {
+                if (form.c.value == "123") {
+                    location = "Principal.html";
+                } else {
+                    alert("Error, contraseña Equivocada");
+                }
+            } else {
+                alert("Error, el usuario no existe");
+            }
+        }
+    </script>
+</body>
+</html>
