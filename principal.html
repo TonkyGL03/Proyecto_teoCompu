@@ -1,122 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <style type="text/css">
+    #diagrama {
+      height: 400px;
+      width: 600px;
+      border: 1px solid lightgray;
+    }
+  </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <title>Proyecto_TeoCompu</title>
+
+  <link rel="stylesheet" href="Formato.css">
 </head>
+
 <body>
-    <h1>Banco Estudiantil</h1>
-    <h1>Bienvenido a tu Cajero Automatico!</h1>
-    <label for="">Cuenta 1 Saldo:</label>
-    <input type="text" name="Cantidad1" id="C1" value = "1000">
-    <label for="">Cuenta 2 Saldo:</label>
-    <input type="text" name="Cantidad2" id="C2" value = "2000">
+  <h1>Bienvenido al Cajero Automático</h1>
 
-    <form action="">
-        <h2>Transferencias</h2>
-        <input type="text" name="" id="Cant" placeholder="Cantidad">
-        <hr>
-        <input type="button" value="Transferencia de cuenta 1-2" id="bt2" onclick="formula()">
-        <input type="button" value="Transferencia de cuenta 2-1" id="bt3" onclick="formula2()">
-        <input type="button" value="Depositar a Cuenta 1" id="bt4" onclick="formula3()">
-        <input type="button" value="Depositar a Cuenta 2" id="bt5" onclick="formula4()">
-        <input type="button" value="Retirar de cuenta 1" id="bt6" onclick="formula5()">
-        <input type="button" value="Retirar de cuenta 2" id="bt7" onclick="formula6()">
-        <input type="button" value="Pedir Prestamo a cuenta 1" id="bt8" onclick="formula7()">
-        <input type="button" value="Pedir Prestamo a cuenta 2" id="bt9" onclick="formula8()">
-        <h5>Derechos Reservados 2023 Gdl Jal Mexico</h5>
-        <h5>Copyright © 2015 - 2021, CTA CUCEI</h5>
-    </form>
-    <script>
-        function formula() {
-            var CantidadT = parseInt(document.getElementById('Cant').value);
-            var Cantidad1 = parseInt(document.getElementById('C1').value);
-            var Cantidad2 = parseInt(document.getElementById('C2').value);
-            
-            if(Cantidad1 > 0){
-            document.getElementById('C1').value = (Cantidad1 - CantidadT)
-            document.getElementById('C2').value = (Cantidad2 + CantidadT)
-            }
-            else{
-                alert("ERROR, Dinero insuficiente")
-            }
-        }
+  <div id="menu">
+    <h2>Menú:</h2>
+    <ul>
+      <li><a href="#" onclick="mostrarSaldo()">Consultar saldo</a></li>
+      <li><a href="#" onclick="retirarDinero()">Retirar dinero</a></li>
+      <li><a href="#" onclick="depositarDinero()">Depositar dinero</a></li>
+      <li><a href="#" onclick="transferir()">Transferir dinero</a></li>
+      <li><a href="#" onclick="verCredito()">Solicitar crédito</a></li>
+      <li><a href="#" onclick="salir()">Salir</a></li>
+    </ul>
+  </div>
 
-        function formula2() {
-            var CantidadT = parseInt(document.getElementById('Cant').value);
-            var Cantidad1 = parseInt(document.getElementById('C1').value);
-            var Cantidad2 = parseInt(document.getElementById('C2').value);
-            
-            if(Cantidad2 > 0){
-            document.getElementById('C1').value = (Cantidad1 + CantidadT)
-            document.getElementById('C2').value = (Cantidad2 - CantidadT)
-            }
-            else{
-                alert("ERROR, Dinero Insuficiente");
-            }
-        }
+  <div id="saldo" style="display: none;">
+    <h2>Saldo disponible:</h2>
+    <p id="saldoActual"></p>
+    <button onclick="volverMenu()">Volver al menú</button>
+  </div>
 
-        function formula3() {
-            var CantidadT = parseInt(document.getElementById('Cant').value);
-            var Cantidad1 = parseInt(document.getElementById('C1').value);
-            var Cantidad2 = parseInt(document.getElementById('C2').value);
-            
-            document.getElementById('C1').value = (Cantidad1 + CantidadT);
-        }
+  <div id="retiro" style="display: none;">
+    <h2>Retirar dinero:</h2>
+    <input type="number" id="montoRetiro" placeholder="Ingrese el monto"><br>
+    <button onclick="realizarRetiro()">Retirar</button>
+    <button onclick="volverMenu()">Cancelar</button>
+  </div>
 
-        function formula4() {
-            var CantidadT = parseInt(document.getElementById('Cant').value);
-            var Cantidad1 = parseInt(document.getElementById('C1').value);
-            var Cantidad2 = parseInt(document.getElementById('C2').value);
-            
-            document.getElementById('C2').value = (Cantidad2 + CantidadT);
-        }
+  <div id="deposito" style="display: none;">
+    <h2>Depositar dinero:</h2>
+    <input type="number" id="montoDeposito" placeholder="Ingrese el monto"><br>
+    <button onclick="realizarDeposito()">Depositar</button>
+    <button onclick="volverMenu()">Cancelar</button>
+  </div>
 
-        function formula5() {
-            var CantidadT = parseInt(document.getElementById('Cant').value);
-            var Cantidad1 = parseInt(document.getElementById('C1').value);
-            var Cantidad2 = parseInt(document.getElementById('C2').value);
-            
-            if(Cantidad1 >= CantidadT && Cantidad1 >= 0){
-            document.getElementById('C1').value = (Cantidad1 - CantidadT);
-            }
-            else{
-                alert("ERROR, Dinero insuficiente")
-            }
-        }
+  <div id="transferencia" style="display: none;">
+    <h2>Transferir dinero:</h2>
+    <input type="number" id="montoTransferencia" placeholder="Ingrese el monto"><br>
+    <select id="cuentaDestino">
+      <option value="cuenta1">Cuenta 1</option>
+      <option value="cuenta2">Cuenta 2</option>
+    </select><br>
+    <button onclick="realizarTransferencia()">Transferir</button>
+    <button onclick="volverMenu()">Cancelar</button>
+  </div>
 
-        function formula6() {
-            var CantidadT = parseInt(document.getElementById('Cant').value);
-            var Cantidad1 = parseInt(document.getElementById('C1').value);
-            var Cantidad2 = parseInt(document.getElementById('C2').value);
-            
-            if(Cantidad2 >= CantidadT && Cantidad2 >= 0){
-            document.getElementById('C2').value = (Cantidad2 - CantidadT);
-            }
-            else{
-                alert("ERROR, Dinero insuficiente");
-            }
-        }
+  <div id="credito" style="display: none;">
+    <h2>Crédito:</h2>
+    <p id="saldoCredito"></p>
+    <button onclick="aceptarCredito()">Aceptar credito</button>
+    <button onclick="volverMenu()">Volver al menú</button>
+  </div>
 
-        function formula7(){
-            var CantidadT = parseInt(document.getElementById('Cant').value);
-            var Cantidad1 = parseInt(document.getElementById('C1').value);
-            var Cantidad2 = parseInt(document.getElementById('C2').value);
+  <h1>Diagrama de Transiciones</h1>
 
-            document.getElementById('C1').value = (Cantidad1 + 1000);
-        }
+  <div id="diagrama"></div>
 
-        function formula8(){
-            var CantidadT = parseInt(document.getElementById('Cant').value);
-            var Cantidad1 = parseInt(document.getElementById('C1').value);
-            var Cantidad2 = parseInt(document.getElementById('C2').value);
+  <script type="text/javascript">
+    // Crear un contenedor para el diagrama
+    var container = document.getElementById('diagrama');
 
-            document.getElementById('C2').value = (Cantidad2 + 1000);   
+    // Definir los nodos y las aristas del diagrama
+    var nodos = new vis.DataSet([
+      { id: 0, label: 'q0' },
+      { id: 1, label: 'q1' },
+      { id: 2, label: 'q2' },
+      { id: 3, label: 'q3' },
+      { id: 4, label: 'q4' },
+      { id: 5, label: 'q5' },
+      { id: 6, label: 'q6' },
+    ]);
 
-        }
+    var aristas = new vis.DataSet([
+      { from: 0, to: 1, label: '1' },
+      { from: 1, to: 0, label: '0' },
+      { from: 1, to: 2, label: '1' },
+      { from: 2, to: 3, label: '1' },
+      { from: 3, to: 3, label: '2, 1, 0' },
+      { from: 3, to: 2, label: '3' },
+      { from: 2, to: 4, label: '2' },
+      { from: 4, to: 4, label: '1, 2' },
+      { from: 4, to: 2, label: '3' },
+      { from: 2, to: 5, label: '3' },
+      { from: 5, to: 5, label: '0, 1, 2' },
+      { from: 5, to: 2, label: '3' },
+      { from: 2, to: 6, label: '4' },
+      { from: 6, to: 6, label: '1, 2' },
+      { from: 6, to: 2, label: '3' },
+    ]);
 
-    </script>
+    // Definir opciones del diagrama
+    var opciones = {
+      nodes: {
+        shape: 'box',
+      },
+    };
+
+    // Crear el objeto del diagrama
+    var datos = {
+      nodes: nodos,
+      edges: aristas,
+    };
+
+    // Inicializar el diagrama
+    var diagrama = new vis.Network(container, datos, opciones);
+  </script>
 </body>
+
+<script>
+  var saldoCuenta1 = 1000; // Saldo inicial cuenta 1 ver credito
+  var saldoCuenta2 = 2000; // Saldo inicial cuenta 2
+  var saldoCredito = 5000; // Saldo inicial crédito
+
+  function mostrarSaldo() {
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("saldo").style.display = "block";
+    document.getElementById("saldoActual").innerHTML = "Cuenta 1: $" + saldoCuenta1 + "<br>Cuenta 2: $" + saldoCuenta2;
+  }
+
+  function retirarDinero() {
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("retiro").style.display = "block";
+  }
+
+  function aceptarCredito() {
+    Text("Tu Credito autorizado fue de:")
+    saldoCuenta1 += saldoCredito;
+    alert('Credito Aceptado con Exito');
+  }
+
+  function depositarDinero() {
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("deposito").style.display = "block";
+  }
+
+  function transferir() {
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("transferencia").style.display = "block";
+  }
+
+  function verCredito() {
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("credito").style.display = "block";
+
+    document.getElementById("saldoCredito").innerHTML = "Saldo crédito: $" + saldoCredito;
+  }
+
+  function realizarRetiro() {
+    var montoRetiro = parseFloat(document.getElementById("montoRetiro").value);
+    if (montoRetiro > saldoCuenta1) {
+      alert("No tiene saldo suficiente en la cuenta 1 para retirar esa cantidad.");
+    } else {
+      saldoCuenta1 -= montoRetiro;
+      alert("Retiro realizado con éxito. Saldo restante en la cuenta 1: $" + saldoCuenta1);
+      volverMenu();
+    }
+  }
+
+  function realizarDeposito() {
+    var montoDeposito = parseFloat(document.getElementById("montoDeposito").value);
+    saldoCuenta1 += montoDeposito;
+    alert("Depósito realizado con éxito. Saldo actual en la cuenta 1: $" + saldoCuenta1);
+    volverMenu();
+  }
+
+  function realizarTransferencia() {
+    var montoTransferencia = parseFloat(document.getElementById("montoTransferencia").value);
+    var cuentaDestino = document.getElementById("cuentaDestino").value;
+
+    if (cuentaDestino === "cuenta1") {
+      if (montoTransferencia > saldoCuenta2) {
+        alert("No tiene saldo suficiente en la cuenta 2 para transferir esa cantidad.");
+      } else {
+        saldoCuenta2 -= montoTransferencia;
+        saldoCuenta1 += montoTransferencia;
+        alert("Transferencia realizada con éxito. Saldo restante en la cuenta 2: $" + saldoCuenta2);
+        volverMenu();
+      }
+    } else if (cuentaDestino === "cuenta2") {
+      if (montoTransferencia > saldoCuenta1) {
+        alert("No tiene saldo suficiente en la cuenta 1 para transferir esa cantidad.");
+      } else {
+        saldoCuenta1 -= montoTransferencia;
+        saldoCuenta2 += montoTransferencia;
+        alert("Transferencia realizada con éxito. Saldo restante en la cuenta 1: $" + saldoCuenta1);
+        volverMenu();
+      }
+    }
+  }
+
+  function volverMenu() {
+    document.getElementById("saldo").style.display = "none";
+    document.getElementById("retiro").style.display = "none";
+    document.getElementById("deposito").style.display = "none";
+    document.getElementById("transferencia").style.display = "none";
+    document.getElementById("credito").style.display = "none";
+    document.getElementById("menu").style.display = "block";
+  }
+
+  function salir() {
+    // Agregar aquí cualquier lógica adicional antes de cerrar la sesión
+    alert("Sesión cerrada. ¡Gracias por utilizar el cajero automático!");
+  }
+
+
+</script>
+</body>
+
 </html>
